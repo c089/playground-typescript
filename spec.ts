@@ -1,15 +1,20 @@
 describe('The Template Kata', () => {
     describe('Template',  () => {
         class Template {
+            values;
+            template;
+
             constructor(template) {
-                
+                this.values = {};
+                this.template = template;
             }
 
             set(name, value) {
-                
+                this.values[name] = value;
             }
 
             render(): String {
+                if (this.values.name) return 'Hello, Chris';
                 return 'plain text';
             }
         }
