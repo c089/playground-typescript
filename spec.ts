@@ -31,5 +31,15 @@ describe('The Template Kata', () => {
 
             expect(template.render()).toBe('Hello, John');
         });
+
+        it.skip('replaces multiple variables', () => {
+            const template = new Template('Hello, ${a} and {b} and {c}');
+
+            template.set('a', 'Mr. A');
+            template.set('b', 'Ms. B');
+            template.set('c', 'Mx. C');
+
+            expect(template.render()).toBe('Hello, Mr. A and Ms. B and Mx. C');
+        });
     });
 });
