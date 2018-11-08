@@ -9,7 +9,7 @@ describe('The Template Kata', () => {
         });
 
         it('replaces a variable', () => {
-            const template = new Template('Hello, {$name}');
+            const template = new Template('Hello, ${name}');
 
             template.set('name', 'Chris');
 
@@ -17,7 +17,7 @@ describe('The Template Kata', () => {
         });
 
         it('replaces a variable with a different value', () => {
-            const template = new Template('Hello, {$name}');
+            const template = new Template('Hello, ${name}');
 
             template.set('name', 'Nat');
 
@@ -25,7 +25,7 @@ describe('The Template Kata', () => {
         });
 
         it('replaces a different variable', () => {
-            const template = new Template('Hello, {$firstName}');
+            const template = new Template('Hello, ${firstName}');
 
             template.set('firstName', 'John');
 
