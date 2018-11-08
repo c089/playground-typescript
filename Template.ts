@@ -12,8 +12,8 @@ export class Template {
     }
 
     render(): String {
-        if (this.values.name) return 'Hello, ' + this.values.name;
-        if (this.values.firstName) return 'Hello, ' + this.values.firstName;
+        if (this.values.name) return this.template.replace('${name}', this.values.name);
+        if (this.values.firstName) return this.template.replace('${firstName}', this.values.firstName);
         return 'plain text';
     }
 }
