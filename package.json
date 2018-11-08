@@ -1,0 +1,11 @@
+{
+  "name": "typescript-playground",
+  "version": "1.0.0",
+  "description": "My environment for playing with typescript",
+  "main": "index.js",
+  "scripts": {
+    "test": "exit 0"
+  },
+  "author": "Christoph Neuroth <christoph.neuroth@gmail.com>",
+  "license": "ISC"
+}
