@@ -42,4 +42,45 @@ describe('The Template Kata', () => {
             expect(template.render()).toBe('Hello, Mr. A and Ms. B and Mx. C');
         });
     });
+
+    describe('TemplateParser', () => {
+        type Segment = PlainTextSegment | VariableSegment
+        class PlainTextSegment {
+            constructor(text) {
+                this.text = text;
+            }
+            text: String
+        }
+        type VariableSegment = {
+            variableName: String
+        }
+        type TemplateData = {
+            segments: Array<Segment>
+        };
+
+        function parseTemplate (template: String): TemplateData {
+            if (template[0] == '$') {
+                return {
+                    segments: [
+                        { variableName: 'variable' }
+                    ]
+                }
+            }
+            return {
+                segments: [{text: template}]
+            }
+        };
+
+        it('parses a plain text template', () => {
+            const template = parseTemplate('plain text');
+            expect(template.segments).toHaveLength(1);
+            expect(template.segments[0]).toEqual({text : 'plain text'});
+        });
+
+        it('parses a template with a variable', () => {
+            const template = parseTemplate('${variable}');
+            expect(template.segments).toHaveLength(1);
+            expect(template.segments[0]).toEqual({variableName : 'variable'});
+        });
+    });
 });
