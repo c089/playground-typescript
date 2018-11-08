@@ -14,7 +14,7 @@ describe('The Template Kata', () => {
             }
 
             render(): String {
-                if (this.values.name) return 'Hello, Chris';
+                if (this.values.name) return 'Hello, ' + this.values.name;
                 return 'plain text';
             }
         }
@@ -30,6 +30,14 @@ describe('The Template Kata', () => {
             template.set('name', 'Chris');
 
             expect(template.render()).toBe('Hello, Chris');
+        });
+
+        it('replaces a variable with a different value', () => {
+            const template = new Template('Hello, {$name}');
+
+            template.set('name', 'Nat');
+
+            expect(template.render()).toBe('Hello, Nat');
         });
     });
 });
