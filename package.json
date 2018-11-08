@@ -7,6 +7,10 @@
     "test": "exit 0"
   },
   "author": "Christoph Neuroth <christoph.neuroth@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/c089/playground-typescript"
+  },
   "license": "ISC",
   "devDependencies": {
     "typescript": "^3.1.6"
