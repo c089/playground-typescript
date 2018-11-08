@@ -23,5 +23,13 @@ describe('The Template Kata', () => {
 
             expect(template.render()).toBe('Hello, Nat');
         });
+
+        it('replaces a different variable', () => {
+            const template = new Template('Hello, {$firstName}');
+
+            template.set('firstName', 'John');
+
+            expect(template.render()).toBe('Hello, John');
+        });
     });
 });

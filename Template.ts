@@ -13,6 +13,7 @@ export class Template {
 
     render(): String {
         if (this.values.name) return 'Hello, ' + this.values.name;
+        if (this.values.firstName) return 'Hello, ' + this.values.firstName;
         return 'plain text';
     }
 }
