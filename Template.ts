@@ -11,9 +11,13 @@ export class Template {
         this.values[name] = value;
     }
 
+    private replaceVariable(variableName) {
+        return this.template.replace('${' + variableName + '}', this.values[variableName]);
+    }
+
     render(): String {
-        if (this.values.name) return this.template.replace('${name}', this.values.name);
-        if (this.values.firstName) return this.template.replace('${firstName}', this.values.firstName);
+        if (this.values.name) return this.replaceVariable('name');
+        if (this.values.firstName) return this.replaceVariable('firstName');
         return 'plain text';
     }
 }
