@@ -3,7 +3,7 @@ describe('The Template Kata', () => {
         it('renders a plain text template', () => {
             class Template {
                 render(): String {
-                    return null;
+                    return 'plain text';
                 }
             }
             const template = new Template();
