@@ -1,4 +1,4 @@
-import { map, append, head, pipe, reduce, aperture } from 'ramda';
+import { map, append, head, pipe, sum, aperture } from 'ramda';
 
 describe('inverse captcha', () => {
     const digitSum = (a,b) => a === b ? a : 0;
@@ -9,7 +9,7 @@ describe('inverse captcha', () => {
             (x => append(head(x), x)),
             aperture(2),
             map(( [cur, next] ) => digitSum(cur, next)),
-            reduce((acc, c) => acc + c, 0)
+            sum
     );
 
 
