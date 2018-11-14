@@ -3,15 +3,14 @@ import { map, append, head, pipe, reduce, aperture } from 'ramda';
 describe('inverse captcha', () => {
     const digitSum = (a,b) => a === b ? a : 0;
 
-    const inverseCaptcha = (characters: string) => {
-        return pipe(
+    const inverseCaptcha = pipe(
             Array.from,
             map((c: string) => parseInt(c, 10)),
             (x => append(head(x), x)),
             aperture(2),
             reduce((acc, [cur, next]) => acc + digitSum(cur, next), 0)
-        )(characters)
-    }
+    );
+
 
     it('should be 1 for singe digit 1', () => {
         expect(inverseCaptcha('1')).toEqual(1);
