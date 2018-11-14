@@ -8,7 +8,7 @@ describe('inverse captcha', () => {
             map((c: string) => parseInt(c, 10)),
             (x => append(head(x), x)),
             aperture(2),
-            map(( [cur, next] ) => digitSum(cur, next)),
+            map(( [current, next] ) => digitSum(current, next)),
             sum
     );
 
