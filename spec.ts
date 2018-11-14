@@ -1,9 +1,11 @@
+import { map, append } from 'ramda';
+
 describe('inverse captcha', () => {
     const digitSum = (a,b) => a === b ? a : 0;
 
     const inverseCaptcha = (characters: string) => {
-        const digits = Array.from(characters)
-            .map((c: string) => parseInt(c, 10));
+        const charsArray = Array.from(characters);
+        const digits = map((c: string) => parseInt(c, 10), charsArray);
 
         return [...digits, digits[0]]
             .reduce(
