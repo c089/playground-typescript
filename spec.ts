@@ -1,14 +1,16 @@
 import { map, append, head, pipe, sum, aperture } from 'ramda';
 
 describe('inverse captcha', () => {
-    const digitSum = (a,b) => a === b ? a : 0;
+    const digitSum = (a: number,b: number): number => a === b ? a : 0;
+    const parseNumber = x => parseInt(x, 10)
 
-    const inverseCaptcha = pipe(
+    const inverseCaptcha: (input: string) => number  = pipe(
             Array.from,
-            map(c => parseInt(c.toString(), 10)),
-            (x => append(head(x), x)),
+            map(parseNumber),
+            x => append(head(x))(x),
             aperture(2),
-            map(( [current, next] ) => digitSum(current, next)),
+            (x: [number, number][]) => x,
+            map(([current, next] : [number, number]) => digitSum(current, next)),
             sum
     );
 

@@ -2,6 +2,7 @@
     "compilerOptions": {
         "esModuleInterop": true,
         "moduleResolution": "node",
-        "target": "es2018"
+        "target": "es2018",
+        "lib": [ "es2018" ]
     }
 }
