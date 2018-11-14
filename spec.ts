@@ -1,13 +1,9 @@
 describe('inverse captcha', () => {
-    const digitAtPosition = (c: string, position: number) => {
-        return parseInt(c[position], 10);
-    }
-
     const digitSum = (a,b) => a === b ? a : 0;
 
     const inverseCaptcha = (characters: string) => {
         const digits = Array.from(characters).map((c: string) => parseInt(c, 10));
-        const digit0 = digitAtPosition(characters, 0);
+        const digit0 = digits[0];
 
         return [...digits, digit0].reduce((acc, cur, idx, src) => {
             const next = src[idx+1];
