@@ -5,11 +5,12 @@ describe('inverse captcha', () => {
 
     const inverseCaptcha = (characters: string) => {
         return pipe(
+            Array.from,
             map((c: string) => parseInt(c, 10)),
             (x => append(head(x), x)),
             aperture(2),
             reduce((acc, [cur, next]) => acc + digitSum(cur, next), 0)
-        )(Array.from(characters))
+        )(characters)
     }
 
     it('should be 1 for singe digit 1', () => {
