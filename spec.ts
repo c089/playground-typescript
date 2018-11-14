@@ -1,86 +1,78 @@
-import { Template } from './Template';
+describe('inverse captcha', () => {
+    const digitAtPosition = (c: string, position: number) => {
+        return parseInt(c[position], 10);
+    }
 
-describe('The Template Kata', () => {
-    describe('Template',  () => {
-        it('renders a plain text template', () => {
-            const template = new Template('plain text');
+    const digitSum = (a,b) => a === b ? a : 0;
 
-            expect(template.render()).toBe('plain text');
-        });
+    const inverseCaptcha = (characters: string) => {
+        const digits = Array.from(characters).map((c: string) => parseInt(c, 10));
+        const digit0 = digitAtPosition(characters, 0);
 
-        it('replaces a variable', () => {
-            const template = new Template('Hello, ${name}');
+        return [...digits, digit0].reduce((acc, cur, idx, src) => {
+            const next = src[idx+1];
+            return acc + digitSum(cur, next);
+        }, 0);
+    }
 
-            template.set('name', 'Chris');
-
-            expect(template.render()).toBe('Hello, Chris');
-        });
-
-        it('replaces a variable with a different value', () => {
-            const template = new Template('Hello, ${name}');
-
-            template.set('name', 'Nat');
-
-            expect(template.render()).toBe('Hello, Nat');
-        });
-
-        it('replaces a different variable', () => {
-            const template = new Template('Hello, ${firstName}');
-
-            template.set('firstName', 'John');
-
-            expect(template.render()).toBe('Hello, John');
-        });
-
-        it.skip('replaces multiple variables', () => {
-            const template = new Template('Hello, ${a} and {b} and {c}');
-
-            template.set('a', 'Mr. A');
-            template.set('b', 'Ms. B');
-            template.set('c', 'Mx. C');
-
-            expect(template.render()).toBe('Hello, Mr. A and Ms. B and Mx. C');
-        });
+    it('should be 1 for singe digit 1', () => {
+        expect(inverseCaptcha('1')).toEqual(1);
     });
 
-    describe('TemplateParser', () => {
-        type Segment = PlainTextSegment | VariableSegment
-        class PlainTextSegment {
-            constructor(text) {
-                this.text = text;
-            }
-            text: String
-        }
-        type VariableSegment = {
-            variableName: String
-        }
-        type TemplateData = {
-            segments: Array<Segment>
-        };
-
-        function parseTemplate (template: String): TemplateData {
-            if (template[0] == '$') {
-                return {
-                    segments: [
-                        { variableName: 'variable' }
-                    ]
-                }
-            }
-            return {
-                segments: [{text: template}]
-            }
-        };
-
-        it('parses a plain text template', () => {
-            const template = parseTemplate('plain text');
-            expect(template.segments).toHaveLength(1);
-            expect(template.segments[0]).toEqual({text : 'plain text'});
-        });
-
-        it('parses a template with a variable', () => {
-            const template = parseTemplate('${variable}');
-            expect(template.segments).toHaveLength(1);
-            expect(template.segments[0]).toEqual({variableName : 'variable'});
-        });
+    it('should be 2 for single digit 2', () => {
+        expect(inverseCaptcha('2')).toEqual(2);
     });
+
+    it('should be 0 for 12', () => {
+        expect(inverseCaptcha('12')).toEqual(0);
+    });
+
+    it('should be 0 for 21', () => {
+        expect(inverseCaptcha('21')).toEqual(0);
+    });
+
+    it('should be 2 for 11', () => {
+        expect(inverseCaptcha('11')).toEqual(2);
+    });
+
+    it('should be 4 for 22', () => {
+        expect(inverseCaptcha('22')).toEqual(4);
+    });
+
+    it('should be 6 for 33', () => {
+        expect(inverseCaptcha('33')).toEqual(6);
+    });
+
+    it('should be 3 for 111', () => {
+        expect(inverseCaptcha('111')).toEqual(3);
+    });
+
+    it('should be 6 for 222', () => {
+        expect(inverseCaptcha('222')).toEqual(6);
+    });
+
+    it('should be 1 for 112', () => {
+        expect(inverseCaptcha('112')).toEqual(1);
+    });
+
+    it('should be 0 for 123', () => {
+        expect(inverseCaptcha('123')).toEqual(0);
+    });
+
+    it('should be 2 for 122', () => {
+        expect(inverseCaptcha('122')).toEqual(2);
+    });
+
+    it('should be 9 for 91212129', () => {
+        expect(inverseCaptcha('91212129')).toEqual(9);
+    });
+
+    it('should be 0 for 1234', () => {
+        expect(inverseCaptcha('1234')).toBe(0);
+    });
+
+    it('should be 4 for 1111', () => {
+        expect(inverseCaptcha('1111')).toBe(4);
+    });
+
 });
