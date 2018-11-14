@@ -5,7 +5,7 @@ describe('inverse captcha', () => {
 
     const inverseCaptcha = pipe(
             Array.from,
-            map((c: string) => parseInt(c, 10)),
+            map(c => parseInt(c.toString(), 10)),
             (x => append(head(x), x)),
             aperture(2),
             map(( [current, next] ) => digitSum(current, next)),
