@@ -1,16 +1,15 @@
-import { map, append, pipe } from 'ramda';
+import { map, append, head, pipe, reduce, aperture } from 'ramda';
 
 describe('inverse captcha', () => {
     const digitSum = (a,b) => a === b ? a : 0;
 
     const inverseCaptcha = (characters: string) => {
-        const charsArray = Array.from(characters);
-        const digits = pipe(map((c: string) => parseInt(c, 10)))(charsArray);
-
-        return [...digits, digits[0]]
-            .reduce(
-                (acc, cur, idx, src) => acc + digitSum(cur, src[idx+1]),
-                0);
+        return pipe(
+            map((c: string) => parseInt(c, 10)),
+            (x => append(head(x), x)),
+            aperture(2),
+            reduce((acc, [cur, next]) => acc + digitSum(cur, next), 0)
+        )(Array.from(characters))
     }
 
     it('should be 1 for singe digit 1', () => {
