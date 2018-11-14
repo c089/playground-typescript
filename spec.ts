@@ -2,13 +2,13 @@ describe('inverse captcha', () => {
     const digitSum = (a,b) => a === b ? a : 0;
 
     const inverseCaptcha = (characters: string) => {
-        const digits = Array.from(characters).map((c: string) => parseInt(c, 10));
-        const digit0 = digits[0];
+        const digits = Array.from(characters)
+            .map((c: string) => parseInt(c, 10));
 
-        return [...digits, digit0].reduce((acc, cur, idx, src) => {
-            const next = src[idx+1];
-            return acc + digitSum(cur, next);
-        }, 0);
+        return [...digits, digits[0]]
+            .reduce(
+                (acc, cur, idx, src) => acc + digitSum(cur, src[idx+1]),
+                0);
     }
 
     it('should be 1 for singe digit 1', () => {
