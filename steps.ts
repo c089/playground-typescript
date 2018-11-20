@@ -1,21 +1,38 @@
 const {Given, When, Then} = require('cucumber');
+const assert = require('assert');
 
+type Amount = String;
+type DateWithoutTime = Date;
+
+class Account {
+    deposit(amount: Amount, date: DateWithoutTime) {
+    }
+
+    withdraw(amount: Amount, date: DateWithoutTime) {
+    }
+
+    printStatement() {
+    }
+};
+
+let account;
+let statement;
 Given('I have opened an account', function () {
-    return 'pending';
+    account = new Account();
 });
 
-Given('I have deposited {int} EUR on {int}{int}{int}', function (int, int2, int3, int4) {
-    return 'pending';
+Given('I have deposited {int} EUR on {string}', function (amountDeposited, onDate) {
+    account.deposit(amountDeposited, onDate);
 });
 
-Given('I have withdrawn {int} EUR on {int}{int}{int}', function (int, int2, int3, int4) {
-    return 'pending';
+Given('I have withdrawn {int} EUR on {string}', function (amountWithdrawn, onDate) {
+    account.withdraw(amountWithdrawn, onDate);
 });
 
 When('I view my statement', function () {
-    return 'pending';
+    statement = account.printStatement();
 });
 
-Then('the statement should read:', function (docString) {
-    return 'pending';
+Then('the statement should read:', function (expectedStatement) {
+    assert.equal(statement, expectedStatement);
 });
