@@ -4,7 +4,7 @@
   "description": "My environment for playing with typescript",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest && cucumber-js ./*.feature --require steps.js"
   },
   "author": "Christoph Neuroth <christoph.neuroth@gmail.com>",
   "repository": {
