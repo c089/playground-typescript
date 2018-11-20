@@ -13,6 +13,7 @@
   },
   "license": "ISC",
   "devDependencies": {
+    "@types/cucumber": "^4.0.4",
     "@types/jest": "^23.3.9",
     "cucumber": "^5.0.2",
     "jest": "^23.6.0",
