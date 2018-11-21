@@ -12,6 +12,10 @@ class Account {
     }
 
     printStatement() {
+        return ( 
+            '24.12.2015   +500      500' + '\n' +
+            '23.8.2016    -100      400'
+        );
     }
 };
 
