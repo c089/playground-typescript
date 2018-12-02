@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@types/ramda": "^0.25.41",
+    "fp-ts": "^1.11.3",
     "ramda": "^0.25.0"
   }
 }
