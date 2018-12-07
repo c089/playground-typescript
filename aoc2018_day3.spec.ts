@@ -1,4 +1,6 @@
 import {flatten} from 'fp-ts/lib/Array';
+import {Map as MapI} from 'immutable';
+
 const puzzleInput = `
 #1 @ 146,196: 19x14
 #2 @ 641,817: 27x28
@@ -1330,11 +1332,14 @@ type Claim = {
 
 type Coordinate = [number, number];
 
-class Fabric {
-    private claims: Map<string, Array<Claim>>;
+type CoordinateToClaims = MapI<string, Array<Claim>>;
 
-    constructor(claims = new Map()) {
-        this.claims = claims;
+class Fabric {
+
+    private map: CoordinateToClaims;
+
+    constructor(map: CoordinateToClaims = MapI()) {
+        this.map = map;
     }
 
     private keyFor([x, y]: Coordinate) {
@@ -1342,27 +1347,30 @@ class Fabric {
     }
 
     claimsForSquare(x: [number, number]): Array<Claim> {
-        return this.claims.get(this.keyFor(x)) || [];
+        return this.map.get(this.keyFor(x)) || [];
+    }
+
+    squaresWithConflicts(): CoordinateToClaims {
+        return this.map.filter(x => x.length >= 2);
     }
 
     overlappingSquares(): number {
-        return [...this.claims.values()].filter((x) => x.length >= 2).length;
+        return this.squaresWithConflicts().count();
     }
 
     intactClaims() {
-        const allClaims: Set<Claim> = new Set(flatten([ ...this.claims.values() ]));
+        const allClaims: Set<Claim> = new Set(flatten([ ...this.map.values() ]));
         const conflicts: Set<Claim> =  new Set(flatten(
-            [...this.claims.values()].filter((x) => x.length >= 2)
+            this.squaresWithConflicts().valueSeq().toJS()
         ));
-        const conflictingClaims = new Set(conflicts);
         return [ ...allClaims ].filter(c => !conflicts.has(c));
     }
 
     claimSquare(coordinate: [number, number], claim): Fabric {
         const key = this.keyFor(coordinate);
         const claims = this.claimsForSquare(coordinate);
-        this.claims.set(key, [...claims, claim]); // FIXME mutable map :(
-        return this;
+        const newMap =  this.map.set(key, [...claims, claim]);
+        return new Fabric(newMap);
     }
 }
 
