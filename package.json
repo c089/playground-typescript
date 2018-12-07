@@ -25,6 +25,7 @@
   "dependencies": {
     "@types/ramda": "^0.25.41",
     "fp-ts": "^1.11.3",
+    "immutable": "^4.0.0-rc.12",
     "ramda": "^0.25.0"
   }
 }
