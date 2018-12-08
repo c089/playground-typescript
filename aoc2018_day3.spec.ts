@@ -60,7 +60,7 @@ class Claim implements ValueObject {
 
 type Coordinate = [number, number];
 
-type CoordinateToClaims = MapI<string, Array<Claim>>;
+type CoordinateToClaims = MapI<string, SetI<Claim>>;
 
 class Fabric {
 
@@ -74,12 +74,16 @@ class Fabric {
         return `${x},${y}`;
     }
 
+    private claimsForSquare_(x: [number, number]): SetI<Claim> {
+        return this.map.get(this.keyFor(x), SetI());
+    }
+
     claimsForSquare(x: [number, number]): Array<Claim> {
-        return this.map.get(this.keyFor(x)) || [];
+        return this.claimsForSquare_(x).toJS();
     }
 
     squaresWithConflicts(): CoordinateToClaims {
-        return this.map.filter(x => x.length >= 2);
+        return this.map.filter(x => x.size >= 2);
     }
 
     overlappingSquares(): number {
@@ -87,15 +91,16 @@ class Fabric {
     }
 
     intactClaims(): Array<Claim> {
-        const allClaims = SetI(flatten([ ...this.map.values() ]));
-        const conflicitingClaims = SetI(flatten([... this.squaresWithConflicts().values() ]));
+        const uniqueValues = s => s.reduce((a,b) => a.union(b));
+        const allClaims: SetI<Claim> = uniqueValues(this.map);
+        const conflicitingClaims: SetI<Claim> = uniqueValues(this.squaresWithConflicts());
         return allClaims.subtract(conflicitingClaims).toJS();
     }
 
     claimSquare(coordinate: [number, number], claim): Fabric {
         const key = this.keyFor(coordinate);
-        const claims = this.claimsForSquare(coordinate);
-        const newMap =  this.map.set(key, [...claims, claim]);
+        const claims = this.claimsForSquare_(coordinate);
+        const newMap =  this.map.set(key, claims.add(claim));
         return new Fabric(newMap);
     }
 }
