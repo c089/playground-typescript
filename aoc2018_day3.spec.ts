@@ -1,5 +1,5 @@
 import {flatten} from 'fp-ts/lib/Array';
-import {Map as MapI, Set as SetI, ValueObject} from 'immutable';
+import {Map as MapI, Set as SetI, ValueObject, Range} from 'immutable';
 import {readFileSync} from 'fs';
 
 const claimedFabric = (claims) => claims.reduce(
@@ -87,9 +87,9 @@ class Fabric {
     }
 
     intactClaims(): Array<Claim> {
-        const allClaimsI = SetI(flatten([ ...this.map.values() ]));
+        const allClaims = SetI(flatten([ ...this.map.values() ]));
         const conflicitingClaims = SetI(flatten([... this.squaresWithConflicts().values() ]));
-        return allClaimsI.subtract(conflicitingClaims).toJS();
+        return allClaims.subtract(conflicitingClaims).toJS();
     }
 
     claimSquare(coordinate: [number, number], claim): Fabric {
@@ -102,22 +102,12 @@ class Fabric {
 
 const claimCoordinates = (claim: Claim): Array<Coordinate> => {
     const topLeftX = claim.topLeft[0];
-    const topRightX = topLeftX + claim.width - 1;
-    const topRightY = claim.height + claim.topLeft[1] - 1;
+    const topLeftY = claim.topLeft[1];
 
-    let result: Array<Coordinate> = [];
+    const xs = Range(topLeftX, topLeftX + claim.width);
+    const ys = Range(topLeftY, topLeftY + claim.height);
 
-    let y = claim.topLeft[1];
-    while (y <= topRightY) {
-        let x = topLeftX;
-        while (x <= topRightX) {
-            result.push([x, y]);
-            x += 1;
-        }
-        y += 1;
-    }
-
-    return result;
+    return xs.flatMap((x) => (ys.map(y => [x,y]))).toJS();
 };
 
 const claimArea = (fabric: Fabric, claim): Fabric => {
