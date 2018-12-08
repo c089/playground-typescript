@@ -1,5 +1,5 @@
 import {flatten} from 'fp-ts/lib/Array';
-import {Map as MapI, Set as SetI} from 'immutable';
+import {Map as MapI, Set as SetI, ValueObject} from 'immutable';
 import {readFileSync} from 'fs';
 
 const claimedFabric = (claims) => claims.reduce(
@@ -36,11 +36,26 @@ const parseInput = (input: string) => {
 }
 
 
-type Claim = {
-    id: number,
-    topLeft: [number, number],
-    width: number,
-    height: number
+class Claim implements ValueObject {
+    id: number;
+    topLeft: [number, number];
+    width: number;
+    height: number;
+
+    constructor({id, topLeft, width, height}) {
+        this.id = id;
+        this.topLeft = topLeft;
+        this.width = width;
+        this.height = height;
+    }
+
+    equals(other: any) {
+        return this.id === other.id;
+    }
+
+    hashCode() {
+        return this.id;
+    }
 };
 
 type Coordinate = [number, number];
@@ -212,16 +227,16 @@ describe('AoC 2018 Day 3: No Matter How You Slice It', () => {
 
         it('given a fabric with identical claims, finds overlap', () => {
             const fabric = new Fabric();
-            const claim1 = { id: 1, topLeft: [0, 0], width: 1, height: 1 };
-            const claim2 = { ...claim1, id: 2 };
+            const claim1 = new Claim( { id: 1, topLeft: [0, 0], width: 1, height: 1 } );
+            const claim2 = new Claim( { ...claim1, id: 2 } );
             const claimedFabric = claimArea(claimArea(fabric, claim1), claim2);
             expect(claimedFabric.overlappingSquares()).toEqual(1);
         });
 
         it('given a fabric with overlapping claims, finds overlap', () => {
             const fabric = new Fabric();
-            const claim1 = { id: 1, topLeft: [1, 3], width: 4, height: 4 };
-            const claim2 = { id: 2, topLeft: [3, 1], width: 4, height: 4 };
+            const claim1 = new Claim( { id: 1, topLeft: [1, 3], width: 4, height: 4 } );
+            const claim2 = new Claim( { id: 2, topLeft: [3, 1], width: 4, height: 4 } );
             const claimedFabric = claimArea(claimArea(fabric, claim1), claim2);
             expect(claimedFabric.overlappingSquares()).toEqual(4);
         });
@@ -230,58 +245,58 @@ describe('AoC 2018 Day 3: No Matter How You Slice It', () => {
     describe('claimCoordinates', () => {
         it('returns single coordinate for 1x1 square', () => {
             expect(
-                claimCoordinates({ id: 1, topLeft: [0, 0], width: 1, height: 1 }))
+                claimCoordinates(new Claim( { id: 1, topLeft: [0, 0], width: 1, height: 1 } )))
                 .toEqual([[0, 0]]);
         });
 
         it('returns two coordinates for a 2x1 area', () => {
             expect(
-                claimCoordinates({ id: 1, topLeft: [0, 0], width: 2, height: 1 }))
+                claimCoordinates(new Claim( { id: 1, topLeft: [0, 0], width: 2, height: 1 } )))
                 .toEqual([[0, 0], [1, 0]]);
         });
 
         it('returns two coordinates for a 1x2 area', () => {
             expect(
-                claimCoordinates({ id: 1, topLeft: [0, 0], width: 1, height: 2 }))
+                claimCoordinates(new Claim( { id: 1, topLeft: [0, 0], width: 1, height: 2 } )))
                 .toEqual([[0, 0], [0, 1]]);
         });
 
         it('moves claimed area to the right', () => {
             expect(
-                claimCoordinates({ id: 1, topLeft: [1, 0], width: 2, height: 1 }))
+                claimCoordinates(new Claim( { id: 1, topLeft: [1, 0], width: 2, height: 1 } )))
                 .toEqual([[1, 0], [2, 0]]);
         });
 
         it('moves claimed area up', () => {
             expect(
-                claimCoordinates({ id: 1, topLeft: [0, 1], width: 2, height: 1 }))
+                claimCoordinates(new Claim( { id: 1, topLeft: [0, 1], width: 2, height: 1 } )))
                 .toEqual([[0, 1], [1, 1]]);
         })
 
         it('returns many coords for a wide area', () => {
             expect(
-                claimCoordinates({ id: 1, topLeft: [0, 0], width: 400, height: 1 }).length
+                claimCoordinates(new Claim( { id: 1, topLeft: [0, 0], width: 400, height: 1 } )).length
             ).toEqual(400);
         });
 
         it('returns many coords for a wide and high area', () => {
             expect(
-                claimCoordinates({ id: 1, topLeft: [0, 0], width: 10, height: 10 }).length
+                claimCoordinates(new Claim( { id: 1, topLeft: [0, 0], width: 10, height: 10 } )).length
             ).toEqual(100);
         });
     });
 
     describe('claimArea', () => {
         it('given a fabric and a claim, claims a single square', () => {
-            const claim: Claim = { id: 123, topLeft: [0, 0], width: 1, height: 1 };
+            const claim: Claim = new Claim( { id: 123, topLeft: [0, 0], width: 1, height: 1 } );
             const fabric: Fabric = new Fabric();
 
             expect(claimArea(fabric, claim).claimsForSquare([0, 0])).toEqual([claim]);
         });
 
         it('given two claims for the same square, records both', () => {
-            const claim1: Claim = { id: 1, topLeft: [0, 0], width: 1, height: 1 };
-            const claim2: Claim = { ...claim1, id: 2 };
+            const claim1: Claim = new Claim( { id: 1, topLeft: [0, 0], width: 1, height: 1 } );
+            const claim2: Claim = new Claim( { ...claim1, id: 2 } );
             const fabric: Fabric = new Fabric();
 
             const claims = claimArea(claimArea(fabric, claim1), claim2)
@@ -291,12 +306,12 @@ describe('AoC 2018 Day 3: No Matter How You Slice It', () => {
         });
 
         it('given a fabric and a claim for 2x1 area, claims two squares', () => {
-            const claim: Claim = {
+            const claim: Claim = new Claim( {
                 id: 123,
                 topLeft: [0, 0],
                 width: 2,
                 height: 1
-            };
+            } );
             const fabric: Fabric = new Fabric();
 
             const claimedFabric = claimArea(fabric, claim);
@@ -306,12 +321,12 @@ describe('AoC 2018 Day 3: No Matter How You Slice It', () => {
         });
 
         it('given a fabric and a claim for 1x2 area, claims two squares', () => {
-            const claim: Claim = {
+            const claim: Claim = new Claim( {
                 id: 123,
                 topLeft: [0, 0],
                 width: 1,
                 height: 2
-            };
+            } );
             const fabric: Fabric = new Fabric();
 
             const claimedFabric = claimArea(fabric, claim);
