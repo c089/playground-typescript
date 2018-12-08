@@ -86,15 +86,10 @@ class Fabric {
         return this.squaresWithConflicts().count();
     }
 
-    intactClaims() {
-        const allClaimIds: SetI<number> = SetI(flatten([ ...this.map.values() ]).map(x=>x.id));
-        const allClaims: Set<Claim> = new Set(flatten([ ...this.map.values() ]));
-
-        const conflictingClaimIds: SetI<number> = (
-            SetI(flatten(this.squaresWithConflicts().valueSeq().toJS()).map((x:Claim)=>x.id))
-        );
-        const validClaimIds = allClaimIds.subtract(conflictingClaimIds);
-        return [...allClaims ].filter(c => validClaimIds.has(c.id));
+    intactClaims(): Array<Claim> {
+        const allClaimsI = SetI(flatten([ ...this.map.values() ]));
+        const conflicitingClaims = SetI(flatten([... this.squaresWithConflicts().values() ]));
+        return allClaimsI.subtract(conflicitingClaims).toJS();
     }
 
     claimSquare(coordinate: [number, number], claim): Fabric {
