@@ -1,7 +1,7 @@
 import {Map as MapI, Set as SetI, ValueObject, Range} from 'immutable';
 import {readFileSync} from 'fs';
 
-const parseInput = (input: string) => {
+const parseInput = (input: string): Array<Claim> => {
     const lines = input.split('\n');
     return lines
         .filter(x => x.length > 0)
