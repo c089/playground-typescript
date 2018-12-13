@@ -41,14 +41,14 @@ class Claim implements ValueObject {
         this.height = height;
     }
 
-    coordinates(): Coordinate[] {
+    coordinates(): CoordinateValue[] {
         const topLeftX = this.topLeft[0];
         const topLeftY = this.topLeft[1];
 
         const xs = Range(topLeftX, topLeftX + this.width);
         const ys = Range(topLeftY, topLeftY + this.height);
 
-        return xs.flatMap((x) => (ys.map(y => [x, y]))).toJS();
+        return xs.flatMap((x) => (ys.map(y => coordinateOf(x,y)))).toJS();
     }
 
     equals(other: any) {
@@ -87,7 +87,7 @@ class Fabric {
 
     claimArea(claim: Claim): Fabric {
         return claim.coordinates().reduce(
-            (fabric, coordinate) => fabric.claimSquare(coordinate, claim),
+            (fabric, coordinate) => fabric.claimSquare([coordinate.x, coordinate.y], claim),
             this);
     }
 
@@ -271,7 +271,7 @@ describe('AoC 2018 Day 3: No Matter How You Slice It', () => {
                 topLeft,
                 width,
                 height
-            }).coordinates();
+            }).coordinates().map(c=>[c.x,c.y]);
         };
 
         it('returns single coordinate for 1x1 square', () => {
