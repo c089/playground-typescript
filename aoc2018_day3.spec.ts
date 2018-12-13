@@ -62,7 +62,20 @@ class Claim implements ValueObject {
 
 type Coordinate = [number, number];
 
-type CoordinateToClaims = MapI<string, SetI<Claim>>;
+type CoordinateValue  = {x:number; y: number;} & ValueObject;
+
+const coordinateOf = (x: number, y: number): CoordinateValue => ({
+    x,
+    y,
+    equals: (other) => {
+        return other !== undefined && x === other.x && y === other.y;
+    },
+    hashCode: () => {
+        return x+y;
+    }
+});
+
+type CoordinateToClaims = MapI<CoordinateValue, SetI<Claim>>;
 
 class Fabric {
 
@@ -104,8 +117,8 @@ class Fabric {
         return this.map.filter(x => x.size >= 2);
     }
 
-    private keyFor([x, y]: Coordinate) {
-        return `${x},${y}`;
+    private keyFor([x, y]: Coordinate): CoordinateValue {
+        return coordinateOf(x, y)
     }
 
     private claimsForSquare_(x: [number, number]): SetI<Claim> {
@@ -154,6 +167,26 @@ describe('AoC 2018 Day 3: No Matter How You Slice It', () => {
         });
 
     });
+
+    describe('CoordinateValue', () => {
+        describe('implements Immutable.ValueObject', () => {
+            it('treats two as equal', () => {
+                expect(coordinateOf(0, 0).equals(coordinateOf(0, 0))).toBe(true);
+            });
+
+            it('treats two as different for different x', () => {
+                expect(coordinateOf(0, 0).equals(coordinateOf(1, 0))).toBe(false);
+            });
+
+            it('treats two as different for different y', () => {
+                expect(coordinateOf(0, 0).equals(coordinateOf(0, 1))).toBe(false);
+            });
+
+            it('treats undefined as different', () => {
+                expect(coordinateOf(0, 0).equals(undefined)).toBe(false);
+            });
+        });
+    })
 
     describe('parseInput', () => {
         it('parses a single claim', () => {
