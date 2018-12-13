@@ -310,20 +310,21 @@ describe('AoC 2018 Day 3: No Matter How You Slice It', () => {
     });
 
     describe('claimArea', () => {
+        const claimsAt = (fabric, [x,y]) => fabric.claimsForSquare([x,y]);
+
         it('given a fabric and a claim, claims a single square', () => {
             const claim: Claim = new Claim({ id: 123, topLeft: [0, 0], width: 1, height: 1 });
-            const fabric: Fabric = new Fabric();
+            const fabric: Fabric = new Fabric().claimArea(claim);
 
-            expect(fabric.claimArea(claim).claimsForSquare([0, 0])).toEqual([claim]);
+            expect(claimsAt(fabric, [0,0])).toEqual([claim]);
         });
 
         it('given two claims for the same square, records both', () => {
             const claim1: Claim = new Claim({ id: 1, topLeft: [0, 0], width: 1, height: 1 });
             const claim2: Claim = new Claim({ ...claim1, id: 2 });
-            const fabric: Fabric = new Fabric();
+            const fabric: Fabric = new Fabric().claimArea(claim1).claimArea(claim2);
 
-            const claims = fabric.claimArea(claim1).claimArea(claim2)
-                .claimsForSquare([0, 0])
+            const claims = claimsAt(fabric, [0, 0]);
 
             expect(claims).toEqual([claim1, claim2]);
         });
@@ -339,8 +340,8 @@ describe('AoC 2018 Day 3: No Matter How You Slice It', () => {
 
             const claimedFabric = fabric.claimArea(claim);
 
-            expect(claimedFabric.claimsForSquare([0, 0])).toEqual([claim]);
-            expect(claimedFabric.claimsForSquare([1, 0])).toEqual([claim]);
+            expect(claimsAt(claimedFabric, [0, 0])).toEqual([claim]);
+            expect(claimsAt(claimedFabric, [1, 0])).toEqual([claim]);
         });
 
         it('given a fabric and a claim for 1x2 area, claims two squares', () => {
@@ -350,12 +351,10 @@ describe('AoC 2018 Day 3: No Matter How You Slice It', () => {
                 width: 1,
                 height: 2
             });
-            const fabric: Fabric = new Fabric();
+            const fabric: Fabric = new Fabric().claimArea(claim);
 
-            const claimedFabric = fabric.claimArea(claim);
-
-            expect(claimedFabric.claimsForSquare([0, 0])).toEqual([claim]);
-            expect(claimedFabric.claimsForSquare([0, 1])).toEqual([claim]);
+            expect(claimsAt(fabric, [0, 0])).toEqual([claim]);
+            expect(claimsAt(fabric, [0, 1])).toEqual([claim]);
         });
     });
 });
