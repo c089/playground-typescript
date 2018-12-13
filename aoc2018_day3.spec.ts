@@ -306,7 +306,7 @@ describe('AoC 2018 Day 3: No Matter How You Slice It', () => {
 
         it('returns many coords for a wide and high area', () => {
             expect(
-                (new Claim({ id: 1, topLeft: [0, 0], width: 10, height: 10 })).coordinates().length
+                coordinatesClaimedBy({ topLeft: [0, 0], width: 10, height: 10 }).length
             ).toEqual(100);
         });
     });
