@@ -87,7 +87,7 @@ class Fabric {
 
     claimArea(claim: Claim): Fabric {
         return claim.coordinates().reduce(
-            (fabric, coordinate) => fabric.claimSquare([coordinate.x, coordinate.y], claim),
+            (fabric, coordinate) => fabric.claimSquare(coordinate, claim),
             this);
     }
 
@@ -126,9 +126,9 @@ class Fabric {
     }
 
 
-    private claimSquare(coordinate: [number, number], claim): Fabric {
-        const key = this.keyFor(coordinate);
-        const claims = this.claimsForSquare_(coordinate);
+    private claimSquare(coordinate: CoordinateValue, claim): Fabric {
+        const key = this.keyFor([coordinate.x, coordinate.y]);
+        const claims = this.claimsForSquare_([coordinate.x, coordinate.y]);
         const newMap = this.map.set(key, claims.add(claim));
         return new Fabric(newMap);
     }
