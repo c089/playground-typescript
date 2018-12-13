@@ -1,30 +1,31 @@
 import {Map as MapI, Set as SetI, ValueObject, Range} from 'immutable';
 import {readFileSync} from 'fs';
 
+const parseClaim = (claim: string): Claim => {
+    let current, rest;
+
+    [current, rest] = claim.split(' @ ');
+    const id = current.slice(1);
+
+    [current, rest] = rest.split(',');
+    const topLeftX = parseInt(current, 10);
+
+    [current, rest] = rest.split(': ');
+    const topLeftY = parseInt(current, 10);
+
+    [current, rest] = rest.split('x');
+    const width = parseInt(current, 10);
+
+    [current, rest] = rest.split('\n');
+    const height = parseInt(current, 10);
+
+    return new Claim( { id, topLeft: [topLeftX, topLeftY], width, height } );
+}
 const parseInput = (input: string): Array<Claim> => {
     return input
         .split('\n')
         .filter(x => x.length > 0)
-        .map(line => {
-            let current, rest;
-
-            [current, rest] = line.split(' @ ');
-            const id = current.slice(1);
-
-            [current, rest] = rest.split(',');
-            const topLeftX = parseInt(current, 10);
-
-            [current, rest] = rest.split(': ');
-            const topLeftY = parseInt(current, 10);
-
-            [current, rest] = rest.split('x');
-            const width = parseInt(current, 10);
-
-            [current, rest] = rest.split('\n');
-            const height = parseInt(current, 10);
-
-            return new Claim( { id, topLeft: [topLeftX, topLeftY], width, height } );
-        });
+        .map(parseClaim);
 }
 
 class Claim implements ValueObject {
