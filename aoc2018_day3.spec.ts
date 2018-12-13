@@ -72,20 +72,21 @@ class Fabric {
         this.map = map;
     }
 
-    private keyFor([x, y]: Coordinate) {
-        return `${x},${y}`;
+    claimArea(claim: Claim): Fabric {
+        return claim.coordinates().reduce(
+            (fabric, coordinate) => fabric.claimSquare(coordinate, claim),
+            this);
     }
 
-    private claimsForSquare_(x: [number, number]): SetI<Claim> {
-        return this.map.get(this.keyFor(x), SetI());
-    }
+    claimAll(claims: Claim[]): Fabric {
+        return claims.reduce(
+            (fabric, claim) => fabric.claimArea(claim),
+            this
+        );
 
+    }
     claimsForSquare(x: [number, number]): Array<Claim> {
         return this.claimsForSquare_(x).toJS();
-    }
-
-    private squaresWithConflicts(): CoordinateToClaims {
-        return this.map.filter(x => x.size >= 2);
     }
 
     overlappingSquares(): number {
@@ -99,25 +100,24 @@ class Fabric {
         return allClaims.subtract(conflicitingClaims).toJS();
     }
 
+    private squaresWithConflicts(): CoordinateToClaims {
+        return this.map.filter(x => x.size >= 2);
+    }
+
+    private keyFor([x, y]: Coordinate) {
+        return `${x},${y}`;
+    }
+
+    private claimsForSquare_(x: [number, number]): SetI<Claim> {
+        return this.map.get(this.keyFor(x), SetI());
+    }
+
+
     private claimSquare(coordinate: [number, number], claim): Fabric {
         const key = this.keyFor(coordinate);
         const claims = this.claimsForSquare_(coordinate);
         const newMap = this.map.set(key, claims.add(claim));
         return new Fabric(newMap);
-    }
-
-    claimArea(claim: Claim): Fabric {
-        return claim.coordinates().reduce(
-            (fabric, coordinate) => fabric.claimSquare(coordinate, claim),
-            this);
-    }
-
-    claimAll(claims: Claim[]): Fabric {
-        return claims.reduce(
-            (fabric, claim) => fabric.claimArea(claim),
-            this
-        );
-
     }
 }
 
