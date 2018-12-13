@@ -60,8 +60,6 @@ class Claim implements ValueObject {
     }
 };
 
-type Coordinate = [number, number];
-
 type CoordinateValue = { x: number; y: number; } & ValueObject;
 
 const coordinateOf = (x: number, y: number): CoordinateValue => ({
