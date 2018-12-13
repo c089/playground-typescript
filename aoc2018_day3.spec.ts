@@ -128,7 +128,7 @@ class Fabric {
     }
 }
 
-const claimOf = function ({ id, topLeft, width, height}) {
+const claimOf = function ({ id, topLeft, width, height}): Claim {
     return new Claim({ id, topLeft, width, height });
 };
 
