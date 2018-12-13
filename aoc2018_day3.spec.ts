@@ -48,7 +48,7 @@ class Claim implements ValueObject {
         const xs = Range(topLeftX, topLeftX + this.width);
         const ys = Range(topLeftY, topLeftY + this.height);
 
-        return xs.flatMap((x) => (ys.map(y => coordinateOf(x,y)))).toJS();
+        return xs.flatMap((x) => (ys.map(y => coordinateOf(x, y)))).toJS();
     }
 
     equals(other: any) {
@@ -69,7 +69,7 @@ const coordinateOf = (x: number, y: number): CoordinateValue => ({
         return other !== undefined && x === other.x && y === other.y;
     },
     hashCode: () => {
-        return x+y;
+        return x + y;
     }
 });
 
@@ -128,7 +128,7 @@ class Fabric {
     }
 }
 
-const claimOf = ({ id, topLeft, width, height}): Claim => {
+const claimOf = ({ id, topLeft, width, height }): Claim => {
     return new Claim({ id, topLeft, width, height });
 };
 
@@ -269,7 +269,7 @@ describe('AoC 2018 Day 3: No Matter How You Slice It', () => {
                 topLeft,
                 width,
                 height
-            }).coordinates().map(c=>[c.x,c.y]);
+            }).coordinates().map(c => [c.x, c.y]);
         };
 
         it('returns single coordinate for 1x1 square', () => {
@@ -315,13 +315,13 @@ describe('AoC 2018 Day 3: No Matter How You Slice It', () => {
     });
 
     describe('claimArea', () => {
-        const claimsAt = (fabric, [x,y]) => fabric.claimsForSquare(coordinateOf(x,y));
+        const claimsAt = (fabric, [x, y]) => fabric.claimsForSquare(coordinateOf(x, y));
 
         it('given a fabric and a claim, claims a single square', () => {
             const claim: Claim = claimOf({ id: 123, topLeft: [0, 0], width: 1, height: 1 });
             const fabric: Fabric = new Fabric().claimArea(claim);
 
-            expect(claimsAt(fabric, [0,0])).toEqual([claim]);
+            expect(claimsAt(fabric, [0, 0])).toEqual([claim]);
         });
 
         it('given two claims for the same square, records both', () => {
