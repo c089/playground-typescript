@@ -62,7 +62,7 @@ class Claim implements ValueObject {
 
 type Coordinate = [number, number];
 
-type CoordinateValue  = {x:number; y: number;} & ValueObject;
+type CoordinateValue = { x: number; y: number; } & ValueObject;
 
 const coordinateOf = (x: number, y: number): CoordinateValue => ({
     x,
@@ -265,39 +265,47 @@ describe('AoC 2018 Day 3: No Matter How You Slice It', () => {
     });
 
     describe('Claim.coordinates()', () => {
+        const coordinatesClaimedBy = ({ topLeft, width, height }) => {
+            return new Claim({
+                id: 1,
+                topLeft,
+                width,
+                height
+            }).coordinates();
+        };
+
         it('returns single coordinate for 1x1 square', () => {
-            expect(
-                (new Claim({ id: 1, topLeft: [0, 0], width: 1, height: 1 })).coordinates())
+            expect(coordinatesClaimedBy({ topLeft: [0, 0], width: 1, height: 1 }))
                 .toEqual([[0, 0]]);
         });
 
         it('returns two coordinates for a 2x1 area', () => {
             expect(
-                (new Claim({ id: 1, topLeft: [0, 0], width: 2, height: 1 })).coordinates())
+                coordinatesClaimedBy({ topLeft: [0, 0], width: 2, height: 1 }))
                 .toEqual([[0, 0], [1, 0]]);
         });
 
         it('returns two coordinates for a 1x2 area', () => {
             expect(
-                (new Claim({ id: 1, topLeft: [0, 0], width: 1, height: 2 })).coordinates())
+                coordinatesClaimedBy({ topLeft: [0, 0], width: 1, height: 2 }))
                 .toEqual([[0, 0], [0, 1]]);
         });
 
         it('moves claimed area to the right', () => {
             expect(
-                new Claim({ id: 1, topLeft: [1, 0], width: 2, height: 1 }).coordinates())
+                coordinatesClaimedBy({ topLeft: [1, 0], width: 2, height: 1 }))
                 .toEqual([[1, 0], [2, 0]]);
         });
 
         it('moves claimed area up', () => {
             expect(
-                (new Claim({ id: 1, topLeft: [0, 1], width: 2, height: 1 })).coordinates())
+                coordinatesClaimedBy({ topLeft: [0, 1], width: 2, height: 1 }))
                 .toEqual([[0, 1], [1, 1]]);
         })
 
         it('returns many coords for a wide area', () => {
             expect(
-                (new Claim({ id: 1, topLeft: [0, 0], width: 400, height: 1 })).coordinates().length
+                coordinatesClaimedBy({ topLeft: [0, 0], width: 400, height: 1 }).length
             ).toEqual(400);
         });
 
