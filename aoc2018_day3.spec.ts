@@ -96,8 +96,9 @@ class Fabric {
         );
 
     }
-    claimsForSquare([x,y]: [number, number]): Array<Claim> {
-        return this.claimsForSquare_(coordinateOf(x, y)).toJS();
+
+    claimsForSquare(coordinate: CoordinateValue): Array<Claim> {
+        return this.claimsForSquare_(coordinate).toJS();
     }
 
     overlappingSquares(): number {
@@ -310,7 +311,7 @@ describe('AoC 2018 Day 3: No Matter How You Slice It', () => {
     });
 
     describe('claimArea', () => {
-        const claimsAt = (fabric, [x,y]) => fabric.claimsForSquare([x,y]);
+        const claimsAt = (fabric, [x,y]) => fabric.claimsForSquare(coordinateOf(x,y));
 
         it('given a fabric and a claim, claims a single square', () => {
             const claim: Claim = new Claim({ id: 123, topLeft: [0, 0], width: 1, height: 1 });
