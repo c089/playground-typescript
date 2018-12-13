@@ -1,4 +1,5 @@
 import { findFirst, scanLeft, tail } from 'fp-ts/lib/Array';
+
 import { Option } from 'fp-ts/lib/Option';
 
 const calibrateFrequency = (input: string): number => {
@@ -94,10 +95,5 @@ describe('duplicate frequency finder', () => {
     it('repeats when it cant find a duplicate in one go', () => {
         expect(calibrateFrequency2('+3, +3, +4, -2, -4')).toEqual(10);
     });
-
-    it('solves the puzzle', () => {
-        expect(calibrateFrequency2(puzzleInput)).toEqual(70357)
-    })
-
 });
 
