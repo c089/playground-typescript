@@ -84,7 +84,7 @@ class Fabric {
         return this.claimsForSquare_(x).toJS();
     }
 
-    squaresWithConflicts(): CoordinateToClaims {
+    private squaresWithConflicts(): CoordinateToClaims {
         return this.map.filter(x => x.size >= 2);
     }
 
