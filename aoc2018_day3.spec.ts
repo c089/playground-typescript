@@ -2,8 +2,8 @@ import {Map as MapI, Set as SetI, ValueObject, Range} from 'immutable';
 import {readFileSync} from 'fs';
 
 const parseInput = (input: string): Array<Claim> => {
-    const lines = input.split('\n');
-    return lines
+    return input
+        .split('\n')
         .filter(x => x.length > 0)
         .map(line => {
             let current, rest;
