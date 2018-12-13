@@ -98,8 +98,8 @@ class Fabric {
         );
 
     }
-    claimsForSquare(x: [number, number]): Array<Claim> {
-        return this.claimsForSquare_(x).toJS();
+    claimsForSquare([x,y]: [number, number]): Array<Claim> {
+        return this.claimsForSquare_(coordinateOf(x, y)).toJS();
     }
 
     overlappingSquares(): number {
@@ -121,13 +121,13 @@ class Fabric {
         return coordinateOf(x, y)
     }
 
-    private claimsForSquare_(x: [number, number]): SetI<Claim> {
-        return this.map.get(this.keyFor(x), SetI());
+    private claimsForSquare_(x: CoordinateValue): SetI<Claim> {
+        return this.map.get(x, SetI());
     }
 
 
     private claimSquare(coordinate: CoordinateValue, claim): Fabric {
-        const claims = this.claimsForSquare_([coordinate.x, coordinate.y]);
+        const claims = this.claimsForSquare_(coordinate);
         const newMap = this.map.set(coordinate, claims.add(claim));
         return new Fabric(newMap);
     }
