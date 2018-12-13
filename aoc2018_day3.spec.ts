@@ -117,10 +117,6 @@ class Fabric {
         return this.map.filter(x => x.size >= 2);
     }
 
-    private keyFor([x, y]: Coordinate): CoordinateValue {
-        return coordinateOf(x, y)
-    }
-
     private claimsForSquare_(x: CoordinateValue): SetI<Claim> {
         return this.map.get(x, SetI());
     }
