@@ -127,9 +127,8 @@ class Fabric {
 
 
     private claimSquare(coordinate: CoordinateValue, claim): Fabric {
-        const key = this.keyFor([coordinate.x, coordinate.y]);
         const claims = this.claimsForSquare_([coordinate.x, coordinate.y]);
-        const newMap = this.map.set(key, claims.add(claim));
+        const newMap = this.map.set(coordinate, claims.add(claim));
         return new Fabric(newMap);
     }
 }
