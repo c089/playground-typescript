@@ -99,7 +99,7 @@ class Fabric {
         return allClaims.subtract(conflicitingClaims).toJS();
     }
 
-    claimSquare(coordinate: [number, number], claim): Fabric {
+    private claimSquare(coordinate: [number, number], claim): Fabric {
         const key = this.keyFor(coordinate);
         const claims = this.claimsForSquare_(coordinate);
         const newMap =  this.map.set(key, claims.add(claim));
