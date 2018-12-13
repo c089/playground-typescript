@@ -19,7 +19,7 @@ const parseClaim = (claim: string): Claim => {
     [current, rest] = rest.split('\n');
     const height = parseInt(current, 10);
 
-    return new Claim({ id, topLeft: [topLeftX, topLeftY], width, height });
+    return claimOf({ id, topLeft: [topLeftX, topLeftY], width, height });
 }
 const parseInput = (input: string): Array<Claim> => {
     return input
@@ -127,6 +127,10 @@ class Fabric {
         return new Fabric(newMap);
     }
 }
+
+let claimOf = function ({ id, topLeft, width, height}) {
+    return new Claim({ id, topLeft, width, height });
+};
 
 describe('AoC 2018 Day 3: No Matter How You Slice It', () => {
     describe('part1: number of overlapping squares', () => {
@@ -243,16 +247,16 @@ describe('AoC 2018 Day 3: No Matter How You Slice It', () => {
 
         it('given a fabric with identical claims, finds overlap', () => {
             const fabric = new Fabric();
-            const claim1 = new Claim({ id: 1, topLeft: [0, 0], width: 1, height: 1 });
-            const claim2 = new Claim({ ...claim1, id: 2 });
+            const claim1 = claimOf({ id: 1, topLeft: [0, 0], width: 1, height: 1 });
+            const claim2 = claimOf({ ...claim1, id: 2 });
             const claimedFabric = fabric.claimAll([claim1, claim2]);
             expect(claimedFabric.overlappingSquares()).toEqual(1);
         });
 
         it('given a fabric with overlapping claims, finds overlap', () => {
             const fabric = new Fabric();
-            const claim1 = new Claim({ id: 1, topLeft: [1, 3], width: 4, height: 4 });
-            const claim2 = new Claim({ id: 2, topLeft: [3, 1], width: 4, height: 4 });
+            const claim1 = claimOf({ id: 1, topLeft: [1, 3], width: 4, height: 4 });
+            const claim2 = claimOf({ id: 2, topLeft: [3, 1], width: 4, height: 4 });
             const claimedFabric = fabric.claimAll([claim1, claim2]);
             expect(claimedFabric.overlappingSquares()).toEqual(4);
         });
@@ -260,7 +264,7 @@ describe('AoC 2018 Day 3: No Matter How You Slice It', () => {
 
     describe('Claim.coordinates()', () => {
         const coordinatesClaimedBy = ({ topLeft, width, height }) => {
-            return new Claim({
+            return claimOf({
                 id: 1,
                 topLeft,
                 width,
@@ -314,15 +318,15 @@ describe('AoC 2018 Day 3: No Matter How You Slice It', () => {
         const claimsAt = (fabric, [x,y]) => fabric.claimsForSquare(coordinateOf(x,y));
 
         it('given a fabric and a claim, claims a single square', () => {
-            const claim: Claim = new Claim({ id: 123, topLeft: [0, 0], width: 1, height: 1 });
+            const claim: Claim = claimOf({ id: 123, topLeft: [0, 0], width: 1, height: 1 });
             const fabric: Fabric = new Fabric().claimArea(claim);
 
             expect(claimsAt(fabric, [0,0])).toEqual([claim]);
         });
 
         it('given two claims for the same square, records both', () => {
-            const claim1: Claim = new Claim({ id: 1, topLeft: [0, 0], width: 1, height: 1 });
-            const claim2: Claim = new Claim({ ...claim1, id: 2 });
+            const claim1: Claim = claimOf({ id: 1, topLeft: [0, 0], width: 1, height: 1 });
+            const claim2: Claim = claimOf({ ...claim1, id: 2 });
             const fabric: Fabric = new Fabric().claimArea(claim1).claimArea(claim2);
 
             const claims = claimsAt(fabric, [0, 0]);
@@ -331,7 +335,7 @@ describe('AoC 2018 Day 3: No Matter How You Slice It', () => {
         });
 
         it('given a fabric and a claim for 2x1 area, claims two squares', () => {
-            const claim: Claim = new Claim({
+            const claim: Claim = claimOf({
                 id: 123,
                 topLeft: [0, 0],
                 width: 2,
@@ -346,7 +350,7 @@ describe('AoC 2018 Day 3: No Matter How You Slice It', () => {
         });
 
         it('given a fabric and a claim for 1x2 area, claims two squares', () => {
-            const claim: Claim = new Claim({
+            const claim: Claim = claimOf({
                 id: 123,
                 topLeft: [0, 0],
                 width: 1,
