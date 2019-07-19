@@ -1,8 +1,6 @@
-const {Given, When, Then} = require('cucumber');
-const assert = require('assert');
+const { Given, When, Then } = require("cucumber");
+const assert = require("assert");
 
-Given('something', function () {
-});
+Given("something", function() {});
 
-When('something with a {string}', function (theString) {
-});
+When("something with a {string}", function(theString) {});
