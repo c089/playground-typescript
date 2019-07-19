@@ -1,4 +1,4 @@
-import * as Option from "fp-ts/lib/option";
+import * as Option from "fp-ts/lib/Option";
 
 describe("fp-ts", () => {
   describe("Option", () => {
